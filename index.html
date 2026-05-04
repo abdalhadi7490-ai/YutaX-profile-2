@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-tag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YutaX | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        body {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* هذا يضمن بقاء كل شيء في المنتصف دائماً */
+            text-align: center; 
+        }
+
+        /* الرسوم الخلفية */
+        .bg-visuals { position: fixed; inset: 0; z-index: -1; }
+        .shape { 
+            position: absolute; background: rgba(255,255,255,0.02); 
+            border: 1px solid var(--glass-border); backdrop-filter: blur(5px);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation: float 25s infinite linear; 
+        }
+
+        @keyframes float { 0% { transform: rotate(0deg) translate(0,0); } 50% { transform: rotate(180deg) translate(20px, 40px); } 100% { transform: rotate(360deg) translate(0,0); } }
+
+        /* زر اللغة */
+        .lang-switch {
+            position: fixed; top: 25px; right: 25px;
+            background: var(--glass-bg); color: #fff; border: 1px solid var(--glass-border);
+            padding: 10px 20px; border-radius: 15px; cursor: pointer; backdrop-filter: blur(10px);
+            z-index: 1000; font-size: 0.85rem; font-weight: bold;
+        }
+
+        /* حاوية الصفحة الثابتة والعريضة */
+        .page {
+            display: none; 
+            width: 90%; 
+            max-width: 550px; /* جعلتها عريضة أكثر كما طلبت */
+            background: var(--glass-bg); 
+            backdrop-filter: blur(30px); 
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); 
+            padding: 50px 40px; 
+            border-radius: 40px;
+            animation: slideIn 0.6s ease;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            /* لضمان ثبات العناصر بالداخل في المنتصف بغض النظر عن اتجاه اللغة */
+            margin: auto; 
+        }
+
+        .page.active { display: block; }
+
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.95) translateY(15px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        /* الأيقونات الزجاجية الشفافة */
+        .glass-icon {
+            width: 85px; height: 85px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            border-radius: 24px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; margin: 0 auto 25px; color: #fff;
+        }
+
+        /* روابط التواصل بنمط شفاف */
+        .social-link { 
+            display: flex; align-items: center; justify-content: center; gap: 15px; 
+            background: rgba(255,255,255,0.04); padding: 20px; border-radius: 22px; 
+            text-decoration: none; color: #fff; border: 1px solid var(--glass-border); margin-bottom: 15px;
+            width: 100%;
+        }
+        .social-link i { font-size: 1.5rem; opacity: 0.6; }
+        .social-link:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); transform: translateY(-3px); }
+
+        /* صندوق الإعلانات */
+        .email-card {
+            background: rgba(255,255,255,0.02); padding: 30px; border-radius: 28px;
+            border: 1px dashed rgba(255,255,255,0.15); margin-top: 20px;
+        }
+        #email-text { font-family: 'Courier New', monospace; font-size: 1.2rem; display: block; margin-bottom: 20px; letter-spacing: 1px; }
+        .copy-btn {
+            background: #fff; color: #000; border: none; padding: 12px;
+            border-radius: 15px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem;
+        }
+
+        /* شريط التنقل السفلي */
+        .bottom-nav {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px; background: rgba(255,255,255,0.06);
+            padding: 12px 25px; border-radius: 30px; backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); z-index: 1000;
+        }
+
+        .bottom-nav button {
+            background: transparent; border: none; color: rgba(255,255,255,0.3);
+            padding: 8px 12px; cursor: pointer; display: flex; flex-direction: column;
+            align-items: center; gap: 5px; font-size: 0.75rem; min-width: 65px;
+        }
+
+        .bottom-nav button i { font-size: 1.3rem; }
+        .bottom-nav button.active { color: #fff; }
+        .bottom-nav button.active i { transform: translateY(-3px); text-shadow: 0 0 15px #fff; }
+
+    </style>
+</head>
+<body class="ar">
+
+    <div class="bg-visuals">
+        <div class="shape" style="width:300px; height:300px; top:-80px; left:-80px;"></div>
+        <div class="shape" style="width:200px; height:200px; bottom:15%; right:-50px; animation-delay: -5s;"></div>
+    </div>
+
+    <button class="lang-switch" onclick="toggleLang()">English</button>
+
+    <main>
+        <div id="home" class="page active">
+            <div class="glass-icon"><i class="fas fa-code"></i></div>
+            <h1 id="name" style="font-size: 2.8rem;">YutaX</h1>
+            <p id="bio" style="line-height: 1.9; margin-top: 20px; opacity: 0.8; font-size: 1.1rem;">
+                مبرمج ومطور ألعاب سوداني، عمري 13 سنة، بخبرة تقارب السنة في بناء البرمجيات وتطوير الألعاب المبتكرة.
+            </p>
+        </div>
+
+        <div id="social" class="page">
+            <h2 id="social-title" style="margin-bottom: 30px; font-size: 1.8rem;">قنوات التواصل</h2>
+            <a href="https://www.youtube.com/@yutax_1" class="social-link"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://www.instagram.com/to.19ta_" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://www.tiktok.com/@yuta.x10" class="social-link"><i class="fab fa-tiktok"></i> TikTok</a>
+        </div>
+
+        <div id="ads" class="page">
+            <h2 id="ads-title" style="font-size: 1.8rem;">الإعلانات والتعاون</h2>
+            <div class="email-card">
+                <span id="email-text">sadex192@gmail.com</span>
+                <button class="copy-btn" onclick="copyEmail()" id="copy-btn-text">انسخ الإيميل</button>
+            </div>
+            <p id="ads-note" style="font-size: 0.9rem; margin-top: 20px; opacity: 0.5;">للتواصل بخصوص الأعمال فقط</p>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <button onclick="showPage('home')" id="btn-home" class="active">
+            <i class="fas fa-home"></i>
+            <span class="nav-text">الرئيسية</span>
+        </button>
+        <button onclick="showPage('social')" id="btn-social">
+            <i class="fas fa-hashtag"></i>
+            <span class="nav-text">التواصل</span>
+        </button>
+        <button onclick="showPage('ads')" id="btn-ads">
+            <i class="fas fa-envelope"></i>
+            <span class="nav-text">الإعلانات</span>
+        </button>
+    </nav>
+
+    <script>
+        let currentLang = 'ar';
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('btn-' + pageId).classList.add('active');
+        }
+
+        function toggleLang() {
+            const body = document.body;
+            const btn = document.querySelector('.lang-switch');
+            const htmlTag = document.getElementById('html-tag');
+            
+            if (currentLang === 'ar') {
+                currentLang = 'en';
+                body.className = 'en';
+                htmlTag.dir = 'ltr';
+                btn.innerText = 'العربية';
+                updateUI('Home', 'Social', 'Ads', 
+                         'Sudanese Game Dev & Programmer, 13 years old, with nearly 1 year of experience.', 
+                         'Social Media', 'Ads & Business', 'Copy Email', 'Business inquiries only');
+            } else {
+                currentLang = 'ar';
+                body.className = 'ar';
+                htmlTag.dir = 'rtl';
+                btn.innerText = 'English';
+                updateUI('الرئيسية', 'التواصل', 'الإعلانات', 
+                         'مبرمج ومطور ألعاب سوداني، عمري 13 سنة، بخبرة تقارب السنة في بناء البرمجيات وتطوير الألعاب المبتكرة.', 
+                         'قنوات التواصل', 'الإعلانات والتعاون', 'انسخ الإيميل', 'للتواصل بخصوص الأعمال فقط');
+            }
+        }
+
+        function updateUI(h, s, a, bio, st, at, ct, note) {
+            document.querySelector('#btn-home .nav-text').innerText = h;
+            document.querySelector('#btn-social .nav-text').innerText = s;
+            document.querySelector('#btn-ads .nav-text').innerText = a;
+            document.getElementById('bio').innerText = bio;
+            document.getElementById('social-title').innerText = st;
+            document.getElementById('ads-title').innerText = at;
+            document.getElementById('copy-btn-text').innerText = ct;
+            document.getElementById('ads-note').innerText = note;
+        }
+
+        function copyEmail() {
+            const email = document.getElementById('email-text').innerText;
+            navigator.clipboard.writeText(email);
+            const copyBtn = document.getElementById('copy-btn-text');
+            const originalText = copyBtn.innerText;
+            copyBtn.innerText = currentLang === 'ar' ? 'تم النسخ!' : 'Copied!';
+            setTimeout(() => { copyBtn.innerText = originalText; }, 2000);
+        }
+    </script>
+</body>
+</html>
